@@ -1,7 +1,13 @@
-const { Pool, Client} = require('pg');
+const { Pool, Client } = require('pg')
 
-//pools will use environment variables
-const pool = new Pool();
+
+const pool = new Pool({
+  user: 'dbuser',
+  host: 'database.server.com',
+  database: 'mydb',
+  password: 'secretpassword',
+  port: 3211,
+})
 
 
 pool.query('SELECT NOW()', (err, res) => {
@@ -9,10 +15,19 @@ pool.query('SELECT NOW()', (err, res) => {
   pool.end()
 })
 
-//you can also use async await
-//for connecting information
-const client = new Client()
-await client.connect()
 
-const res = await client.query('SELECT NOW()')
-await client.end();
+const client = new Client({
+  user: 'dbuser',
+  host: 'database.server.com',
+  database: 'mydb',
+  password: 'secretpassword',
+  port: 3211,
+})
+
+
+client.connect()
+
+client.query('SELECT NOW()', (err, res) => {
+  console.log(err, res)
+  client.end()
+})
